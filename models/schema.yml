@@ -1,0 +1,26 @@
+version: 2
+models:
+  - name: exemple_model
+    description: "Clients ayant effectué des réservations de vols, hôtels et voitures sur la même année"
+
+    columns:
+      - name: id_client
+        description: "Identifiant unique du client"
+        tests:
+          - not_null
+          - unique
+
+      - name: nom
+        description: "Nom du client"
+        tests:
+          - not_null
+
+      - name: prenom
+        description: "Prénom du client"
+        tests:
+          - not_null
+
+      - name: annee
+        description: "Année des réservations"
+        tests:
+          - not_null
