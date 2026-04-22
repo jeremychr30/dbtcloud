@@ -1,3 +1,2 @@
-SELECT id_client,nom,prenom,email,pays
-FROM {{source('travelcorp','clients')}}
-WHERE id_client IS NOT NULL
+SELECT id_client,nom_client AS nom,email_client,segment_client
+FROM {{ source('techstore', 'Clients') }}

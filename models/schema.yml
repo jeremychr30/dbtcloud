@@ -1,98 +1,137 @@
 version: 2
 
+
+# SOURCES 
+sources:
+  - name: techstore
+    description: "Données brutes du dataset TechStore"
+    database: luxevoyages-493908
+    schema: TechStore
+
+    tables:
+      - name: Clients
+        description: "Table brute des clients"
+
+      - name: Produits
+        description: "Table brute des produits"
+
+      - name: Ventes
+        description: "Table brute des ventes"
+
+      - name: Dates
+        description: "Table des dates"
+
+
+# STAGING 
 models:
 
-  - name: exemple_model
-    description: "Clients ayant effectué des réservations de vols, hôtels et voitures sur la même année"
-
+  - name: stg_clients
+    description: "Nettoyage et préparation des clients"
     columns:
       - name: id_client
-        description: "Identifiant unique du client"
+        description: "Identifiant du client"
         tests:
           - not_null
           - unique
 
       - name: nom
+        description: "Nom du client"
+
+      - name: segment_client
+        description: "Segment du client"
+
+  - name: stg_produits
+    description: "Nettoyage des produits"
+    columns:
+      - name: id_produit
+        tests:
+          - not_null
+          - unique
+
+      - name: nom_produit
+
+      - name: categorie_produit
+
+  - name: stg_ventes
+    description: "Nettoyage des ventes"
+    columns:
+      - name: id_vente
+        tests:
+          - not_null
+          - unique
+
+      - name: id_client
+      - name: id_produit
+      - name: montant
+      - name: date
+
+
+# DIMENSIONS
+
+  - name: dim_categories
+    description: "Table des catégories de produits normalisées"
+    columns:
+      - name: id_categorie
+        tests:
+          - not_null
+          - unique
+
+      - name: categorie
+
+  - name: dim_produits
+    description: "Dimension des produits liée aux catégories"
+    columns:
+      - name: id_produit
+        tests:
+          - not_null
+          - unique
+
+      - name: id_categorie
         tests:
           - not_null
 
-      - name: prenom
+  - name: dim_segments
+    description: "Segments clients normalisés"
+    columns:
+      - name: id_segment
         tests:
           - not_null
+          - unique
 
-      - name: annee
-        tests:
-          - not_null
+      - name: segment
 
-
-  - name: stg_clients
-    description: "Données nettoyées des clients"
-
+  - name: dim_clients
+    description: "Dimension clients liée aux segments"
     columns:
       - name: id_client
         tests:
           - not_null
           - unique
 
+      - name: id_segment
+        tests:
+          - not_null
 
-  - name: stg_hotels
-    description: "Données nettoyées des hôtels"
+# FACT
 
+  - name: fct_ventes
+    description: "Table de faits des ventes"
     columns:
-      - name: id_hotel
+      - name: id_vente
         tests:
           - not_null
           - unique
 
-
-  - name: stg_agences
-    description: "Données nettoyées des agences"
-
-    columns:
-      - name: id_agence_voiture
+      - name: id_client
         tests:
           - not_null
-          - unique
 
-
-  - name: stg_aeroports
-    description: "Données nettoyées des aéroports"
-
-    columns:
-      - name: id_aeroport
+      - name: id_produit
         tests:
           - not_null
-          - unique
 
-sources:
-  - name: travelcorp
-    description: "Données brutes provenant de BigQuery - dataset TravelCorp"
+      - name: montant
+        tests:
+          - not_null
 
-    database: luxevoyages-493908
-    schema: TravelCorp
-
-    tables:
-
-      - name: clients
-        description: "Table brute des clients"
-
-      - name: hotels
-        description: "Table brute des hôtels"
-
-      - name: agences
-        description: "Table brute des agences de location"
-
-      - name: aeroports
-        description: "Table brute des aéroports"
-
-      - name: reservationsHotels
-        description: "Réservations d'hôtels"
-
-      - name: reservationsVoitures
-        description: "Réservations de voitures"
-
-      - name: reservationsVols
-        description: "Réservations de vols"
-
-      - name: dates
-        description: "Table des dates"
+      - name: date
