@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: raw
+    database: amazonsales-494113
+    schema: raw_amazon_sales
+    tables:
+      - name: raw_amazon_sales
