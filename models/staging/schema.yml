@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: openmeteo
+    database: amazonsales-494113
+    schema: OpenMeteoAccident
+
+    tables:
+      - name: raw_accident
+      - name: raw_weather
