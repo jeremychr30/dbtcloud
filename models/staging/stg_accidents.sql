@@ -11,13 +11,17 @@ cleaned AS (
             SAFE_CAST(mois AS INT64),
             SAFE_CAST(jour AS INT64)
         ) AS date,
-        hrmn AS hour_min,
+        SAFE_CAST(SUBSTR(hrmn, 1, 2) AS INT64) AS hour,
         SAFE_CAST(lat AS FLOAT64) AS lat,
         SAFE_CAST(long AS FLOAT64) AS lon,
         dep,
         com,
         adr
     FROM source
+     WHERE Num_Acc IS NOT NULL
+      AND an IS NOT NULL
+      AND mois IS NOT NULL
+      AND jour IS NOT NULL
 )
 
 SELECT * FROM cleaned

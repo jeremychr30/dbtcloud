@@ -1,0 +1,55 @@
+version: 2
+
+models:
+
+  - name: stg_accidents
+    description: "Accidents nettoyés et typés"
+    columns:
+      - name: accident_id
+        description: "Identifiant unique accident"
+        tests:
+          - not_null
+          - unique
+
+      - name: date
+        description: "Date de l'accident"
+        tests:
+          - not_null
+
+      - name: dep
+        description: "Départements"
+
+  - name: stg_weather
+    description: "Données météo nettoyées"
+    columns:
+      - name: date
+        tests:
+          - not_null
+
+      - name: city
+        tests:
+          - not_null
+
+  - name: fct_accident_weather
+    description: "Fact table météo + accidents"
+    columns:
+
+      - name: date_id
+        description: "Clé date"
+        tests:
+          - not_null
+
+      - name: city_id
+        description: "Clé ville"
+        tests:
+          - not_null
+
+      - name: nb_accidents
+        description: "Nombre d'accidents par jour"
+
+      - name: weathercode
+        tests:
+          - relationships:
+              arguments: 
+                to: ref('dim_weather_type')
+                field: weathercode
